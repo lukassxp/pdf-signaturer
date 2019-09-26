@@ -14,7 +14,6 @@ import Container from '../../components/Container';
 
 export default class Main extends Component {
   state = {
-    trimmedDataURL: null,
     signing: false,
     pdf: null,
   };
@@ -25,34 +24,43 @@ export default class Main extends Component {
     this.sigPad.clear();
   };
 
+  // sleep = ms => {
+  //   return new Promise(resolve => setTimeout(resolve, ms));
+  // };
+
   trim = async () => {
     const { pdf } = this.state;
+
+    this.setState({ signing: true });
 
     const trimmedDataURL = this.sigPad
       .getTrimmedCanvas()
       .toDataURL('image/png');
 
-    const pdfDoc = await PDFDocument.load(pdf);
+    if (pdf) {
+      const pdfDoc = await PDFDocument.load(pdf);
 
-    // const pdfDoc = await PDFDocument.create();
+      const pngImage = await pdfDoc.embedPng(trimmedDataURL);
+      const pngDims = pngImage.scale(0.17);
 
-    const pngImage = await pdfDoc.embedPng(trimmedDataURL);
-    const pngDims = pngImage.scale(0.17);
+      const pages = pdfDoc.getPages();
 
-    const pages = pdfDoc.getPages();
-
-    pages.forEach(page => {
-      page.drawImage(pngImage, {
-        x: 120,
-        y: 59,
-        width: pngDims.width,
-        height: pngDims.height,
+      pages.forEach(page => {
+        page.drawImage(pngImage, {
+          x: 120,
+          y: 59,
+          width: pngDims.width,
+          height: pngDims.height,
+        });
       });
-    });
 
-    const pdfBytes = await pdfDoc.saveAsBase64({ dataUri: true });
+      const pdfBytes = await pdfDoc.saveAsBase64({ dataUri: true });
 
-    this.setState({ trimmedDataURL, pdf: pdfBytes });
+      // await this.sleep(300);
+      this.setState({ pdf: pdfBytes, signing: false });
+    } else {
+      this.setState({ signing: false });
+    }
   };
 
   handleChange = e => {
@@ -67,7 +75,7 @@ export default class Main extends Component {
   };
 
   render() {
-    const { trimmedDataURL, signing, pdf } = this.state;
+    const { signing, pdf } = this.state;
 
     return (
       <Container>
@@ -78,7 +86,7 @@ export default class Main extends Component {
         </h1>
 
         <PdfContainer>
-          <iframe title="pdframe" scrolling="not" src={pdf} />
+          <iframe title="pdframe" src={pdf} />
         </PdfContainer>
 
         <SignContainer>
@@ -101,10 +109,6 @@ export default class Main extends Component {
             </SignButton>
           </div>
         </SignContainer>
-
-        {trimmedDataURL ? (
-          <img src={trimmedDataURL} alt={trimmedDataURL} />
-        ) : null}
       </Container>
     );
   }
