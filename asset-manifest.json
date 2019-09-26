@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.js": "/pdf-signaturer/static/js/main.d0e74977.chunk.js",
+    "main.js.map": "/pdf-signaturer/static/js/main.d0e74977.chunk.js.map",
+    "runtime-main.js": "/pdf-signaturer/static/js/runtime-main.7906700d.js",
+    "runtime-main.js.map": "/pdf-signaturer/static/js/runtime-main.7906700d.js.map",
+    "static/js/2.bd4f209c.chunk.js": "/pdf-signaturer/static/js/2.bd4f209c.chunk.js",
+    "static/js/2.bd4f209c.chunk.js.map": "/pdf-signaturer/static/js/2.bd4f209c.chunk.js.map",
+    "index.html": "/pdf-signaturer/index.html",
+    "precache-manifest.b8db9bd77dbec583a99608171dc95256.js": "/pdf-signaturer/precache-manifest.b8db9bd77dbec583a99608171dc95256.js",
+    "service-worker.js": "/pdf-signaturer/service-worker.js"
+  }
+}
